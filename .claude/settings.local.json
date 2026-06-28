@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:alisawuffles.notion.site)",
+      "WebFetch(domain:www.maxmynter.com)"
+    ]
+  }
+}
