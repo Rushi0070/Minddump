@@ -30,6 +30,14 @@
       ]
     },
     {
+      "type": "sidenote",
+      "content": [
+        { "type": "text", "text": "The swap fails because the measure you integrate against depends on ", "styles": {} },
+        { "type": "inlineMath", "props": { "latex": "\\phi" } },
+        { "type": "text", "text": " — differentiate the density and you pick up an extra score term.", "styles": {} }
+      ]
+    },
+    {
       "type": "math",
       "props": { "latex": "\\nabla_{\\phi}\\, \\mathbb{E}_{q_{\\phi}(z)}[f(z)] \\;\\neq\\; \\mathbb{E}_{q_{\\phi}(z)}[\\nabla_{\\phi} f(z)]" }
     },

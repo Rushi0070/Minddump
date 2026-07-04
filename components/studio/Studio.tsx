@@ -11,6 +11,7 @@ import { BlockNoteView } from "@blocknote/mantine";
 import { MathBlock } from "./blocks/MathBlock";
 import { CalloutBlock } from "./blocks/CalloutBlock";
 import { AnimeBlock } from "./blocks/AnimeBlock";
+import { SidenoteBlock } from "./blocks/SidenoteBlock";
 import { slugify } from "@/lib/slug";
 
 const schema = BlockNoteSchema.create({
@@ -19,6 +20,7 @@ const schema = BlockNoteSchema.create({
     math: MathBlock,
     callout: CalloutBlock,
     anime: AnimeBlock,
+    sidenote: SidenoteBlock,
   },
 });
 
@@ -162,6 +164,15 @@ export default function Studio() {
             icon: <span style={{ fontSize: 16 }}>▤</span>,
             onItemClick: () =>
               insertOrUpdateBlock(editor, { type: "anime" } as any),
+          },
+          {
+            title: "Sidenote (margin note)",
+            group: "Technical",
+            aliases: ["sidenote", "margin", "note", "aside", "tufte"],
+            subtext: "Note that floats into the right margin",
+            icon: <span style={{ fontSize: 16 }}>▸</span>,
+            onItemClick: () =>
+              insertOrUpdateBlock(editor, { type: "sidenote" } as any),
           },
         ],
         query

@@ -130,6 +130,13 @@ async function renderBlock(b: Block, key: number): Promise<React.ReactNode> {
         </div>
       );
     }
+    case "sidenote":
+    case "marginnote":
+      return (
+        <aside key={key} className="marginnote">
+          {renderInline(b.content)}
+        </aside>
+      );
     case "image":
     case "anime": {
       const url = b.props?.url as string | undefined;

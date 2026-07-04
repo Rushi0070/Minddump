@@ -212,6 +212,46 @@ a {
   margin-top: 0.6rem;
 }
 
+/* ---- Margin / side notes (Tufte-style) ----------------------------------- */
+/* Default (mobile + editor): a small bordered note in the text flow. */
+.marginnote {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  line-height: 1.55;
+  color: var(--muted);
+  margin: 0.9rem 0;
+  padding-left: 0.85rem;
+  border-left: 2px solid var(--accent);
+}
+.marginnote-label {
+  display: block;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 0.2rem;
+}
+/* Wide screens: float into the right gutter, aligned with the paragraph. */
+@media (min-width: 1200px) {
+  .prose .marginnote {
+    float: right;
+    clear: right;
+    width: 12rem;
+    margin: 0 -13.25rem 0.6rem 0;
+    padding-left: 0;
+    border-left: none;
+    text-align: left;
+  }
+  .prose .marginnote::before {
+    content: "";
+    display: block;
+    width: 1.25rem;
+    border-top: 1px solid var(--line);
+    margin-bottom: 0.4rem;
+  }
+}
+
 /* ---- Callouts ------------------------------------------------------------- */
 .callout {
   display: flex;
