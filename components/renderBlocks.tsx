@@ -142,9 +142,19 @@ async function renderBlock(b: Block, key: number): Promise<React.ReactNode> {
       const url = b.props?.url as string | undefined;
       if (!url) return null;
       const caption = b.props?.caption as string | undefined;
-      const width = b.props?.width as number | undefined;
+      // BlockNote's built-in image uses previewWidth; our custom block uses width.
+      const width = (b.props?.width || b.props?.previewWidth) as number | undefined;
+      const align = (b.props?.textAlignment || b.props?.alignment) as
+        | string
+        | undefined;
+      const figStyle: React.CSSProperties | undefined =
+        align === "left"
+          ? { textAlign: "left" }
+          : align === "right"
+            ? { textAlign: "right" }
+            : undefined;
       return (
-        <figure key={key}>
+        <figure key={key} style={figStyle}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={url}

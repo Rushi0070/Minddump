@@ -26,7 +26,20 @@
       "Bash(echo \"up: home=$\\(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/\\) studio=$\\(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/studio\\)\")",
       "Bash(git add *)",
       "Bash(git commit -q -m ' *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch -f --msg-filter 'sed \"/Co-Authored-By/d; /Co-authored-by/d\"' -- --all)",
+      "Bash(git stash *)",
+      "Bash(git log *)",
+      "Bash(echo \"home:   $\\(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/\\)\")",
+      "Bash(curl -s -o /dev/null -w '%{http_code}' --max-time 60 http://localhost:3000/studio)",
+      "Bash(echo \"studio: $\\(curl -s -o /dev/null -w '%{http_code}' --max-time 60 http://localhost:3000/studio\\)\")",
+      "Bash(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/blog)",
+      "Bash(echo \"blog:   $\\(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/blog\\)\")",
+      "Bash(curl -s -w \"\\\\nHTTP %{http_code}\\\\n\" -X POST http://localhost:3000/api/upload -F \"file=@Photos_FOR_BLOG/anime/gojo.png;type=image/png\")",
+      "Bash(ls public/uploads/)",
+      "Bash(echo \"hello\")",
+      "Bash(curl -s -w \" HTTP %{http_code}\\\\n\" -X POST http://localhost:3000/api/upload -F \"file=@x.txt;type=text/plain\")",
+      "Bash(rm -f x.txt)"
     ]
   }
 }

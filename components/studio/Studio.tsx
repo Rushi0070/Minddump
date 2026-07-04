@@ -38,8 +38,20 @@ function today(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
+// Upload a file (from the picker, a drop, or a clipboard paste) and return its
+// URL. Wiring this into the editor is what makes Ctrl+V / drag-drop / screenshot
+// paste "just work" — BlockNote routes all of them through here.
+async function uploadFile(file: File): Promise<string> {
+  const fd = new FormData();
+  fd.append("file", file);
+  const res = await fetch("/api/upload", { method: "POST", body: fd });
+  const data = await res.json();
+  if (!res.ok || !data.url) throw new Error(data?.error || "upload failed");
+  return data.url as string;
+}
+
 export default function Studio() {
-  const editor = useCreateBlockNote({ schema });
+  const editor = useCreateBlockNote({ schema, uploadFile });
 
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
@@ -164,10 +176,15 @@ export default function Studio() {
   }
 
   const slashItems = useMemo(
-    () => (query: string) =>
-      filterSuggestionItems(
+    () => (query: string) => {
+      // Hide default media types we don't render on the static site.
+      const hidden = ["Video", "Audio", "File", "Table"];
+      const defaults = getDefaultReactSlashMenuItems(editor).filter(
+        (it: any) => !hidden.includes(it.title)
+      );
+      return filterSuggestionItems(
         [
-          ...getDefaultReactSlashMenuItems(editor),
+          ...defaults,
           {
             title: "Math (equation)",
             group: "Technical",
@@ -186,15 +203,6 @@ export default function Studio() {
               insertOrUpdateBlock(editor, { type: "callout" } as any),
           },
           {
-            title: "Anime / Image",
-            group: "Technical",
-            aliases: ["image", "anime", "img", "figure", "picture"],
-            subtext: "Image with caption",
-            icon: <span style={{ fontSize: 16 }}>▤</span>,
-            onItemClick: () =>
-              insertOrUpdateBlock(editor, { type: "anime" } as any),
-          },
-          {
             title: "Sidenote (margin note)",
             group: "Technical",
             aliases: ["sidenote", "margin", "note", "aside", "tufte"],
@@ -205,7 +213,8 @@ export default function Studio() {
           },
         ],
         query
-      ),
+      );
+    },
     [editor]
   );
 
@@ -303,8 +312,10 @@ export default function Studio() {
       </div>
 
       <p className="studio-hint mono">
-        type <kbd>/</kbd> for blocks · math, code, callouts, images all live in
-        the menu · nothing here ships to the public site until you save
+        type <kbd>/</kbd> for blocks (math, code, callouts, sidenotes) · images:{" "}
+        <kbd>Ctrl</kbd>+<kbd>V</kbd> a screenshot/copied image, drag a file in, or{" "}
+        <kbd>/</kbd>image · drag an image&apos;s edge to resize · click{" "}
+        <b>publish</b> when ready
       </p>
     </div>
   );

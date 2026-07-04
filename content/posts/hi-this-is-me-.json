@@ -1,6 +1,6 @@
 {
   "slug": "hi-this-is-me-",
-  "title": "My notes from Dissecting Gita slokas ",
+  "title": "Beginner's POV inside the realm of RL   ",
   "date": "2026-07-04",
   "tags": [],
   "summary": "",
@@ -19,6 +19,40 @@
     },
     {
       "id": "1d60988a-57c3-4282-9350-85d54cc625ec",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "The course gives you a glimpse of how rl is applied and what is the framework of rl ",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "dce84b7d-b8aa-4e3a-9783-87228913ab16",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "My goal would be to understand and implement that in some way ",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "e38aae65-6698-48bc-9109-8f0b51fd7e2d",
       "type": "paragraph",
       "props": {
         "textColor": "default",
