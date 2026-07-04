@@ -86,13 +86,12 @@ export default function Studio() {
     }
   }
 
-  async function save() {
+  async function doSave(): Promise<string | null> {
     const s = slugify(slug || title);
     if (!s) {
       setStatus("give it a title first");
-      return;
+      return null;
     }
-    setStatus("saving…");
     const post = {
       slug: s,
       title: title || "Untitled",
@@ -113,10 +112,40 @@ export default function Studio() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
-      setStatus(`saved → content/posts/${s}.json  ·  view at /blog/${s}`);
       refreshList();
+      return s;
     } catch (e: any) {
       setStatus(`save failed: ${e?.message || e}`);
+      return null;
+    }
+  }
+
+  async function save() {
+    setStatus("saving…");
+    const s = await doSave();
+    if (s) setStatus(`saved → content/posts/${s}.json  ·  view at /blog/${s}`);
+  }
+
+  async function publish() {
+    setStatus("saving…");
+    const s = await doSave();
+    if (!s) return;
+    setStatus("publishing… (committing + pushing)");
+    try {
+      const res = await fetch("/api/publish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: `Publish: ${title || s}` }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+      setStatus(
+        data.nothingNew
+          ? `already up to date — nothing new to publish`
+          : `published ✓  /blog/${s} — live on your site in ~1 min`
+      );
+    } catch (e: any) {
+      setStatus(`publish failed: ${e?.message || e}`);
     }
   }
 
@@ -230,7 +259,14 @@ export default function Studio() {
           />
         </div>
         <div className="studio-actions">
-          <button className="math-btn primary" onClick={save}>
+          <button
+            className="math-btn primary"
+            onClick={publish}
+            title="Save, commit, and push — updates your live site"
+          >
+            publish
+          </button>
+          <button className="math-btn" onClick={save} title="Save locally only">
             save
           </button>
           <button className="math-btn" onClick={newPost}>
