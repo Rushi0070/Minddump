@@ -10,7 +10,7 @@ export default function Nav() {
   return (
     <nav className="mono flex items-center justify-between py-6 text-sm">
       <Link href="/" className="lowercase tracking-tight text-ink hover:text-accent">
-        ~/minddump
+        ~/sololeveling
       </Link>
       <div className="flex gap-3 text-muted">
         {links.map((l) => (

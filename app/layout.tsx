@@ -9,14 +9,14 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
   ),
   title: {
-    default: "minddump",
-    template: "%s — minddump",
+    default: "sololeveling",
+    template: "%s — sololeveling",
   },
   description:
     "A nerdy little corner of the internet — notes on machine learning, math, and whatever else is rattling around.",
   openGraph: {
     type: "website",
-    title: "minddump",
+    title: "sololeveling",
     description:
       "Notes on machine learning, math, and whatever else is rattling around.",
   },
@@ -50,7 +50,10 @@ export default function RootLayout({
           <Nav />
           <main className="min-h-[70vh] pb-24">{children}</main>
           <footer className="mono flex items-center justify-between border-t border-line py-6 text-xs text-faint">
-            <span>© {new Date().getFullYear()} · built with too much coffee</span>
+            <span>
+              © {new Date().getFullYear()} · built with an unreasonable amount
+              of tokens
+            </span>
             <ThemeToggle />
           </footer>
         </div>

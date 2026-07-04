@@ -1,4 +1,4 @@
-# minddump
+# sololeveling
 
 A minimalist, nerdy technical blog — inspired by [maxmynter.com](https://www.maxmynter.com/),
 Fergus Finn's deep-dives, and Notion's reading experience. Black-on-white, monospace
