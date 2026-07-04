@@ -1,0 +1,539 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ----------------------------------------------------------------------------
+   Design tokens — Max Mynter minimalism × Notion reading comfort.
+   Light is default; .dark flips to a soft, high-contrast night palette.
+---------------------------------------------------------------------------- */
+:root {
+  --font-serif: "Iowan Old Style", "Palatino Linotype", "Palatino", "Georgia",
+    "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", "SF Mono",
+    "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+
+  --paper: #fbfbf9; /* near-white, warm */
+  --ink: #161514; /* near-black */
+  --muted: #565350; /* secondary text */
+  --faint: #8a8580; /* meta / timestamps */
+  --line: #e6e3dd; /* hairlines */
+  --accent: #b3402f; /* a single nerdy red, used sparingly */
+  --code-bg: #f3f1ec;
+}
+
+.dark {
+  --paper: #121211;
+  --ink: #ece9e3;
+  --muted: #b0aca5;
+  --faint: #7d7872;
+  --line: #2a2926;
+  --accent: #e0795f;
+  --code-bg: #1c1b19;
+}
+
+* {
+  border-color: var(--line);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: 18px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Monospace for the "wrapper" of the site: nav, meta, labels, code. */
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* ---- Selection & focus ---------------------------------------------------- */
+::selection {
+  background: var(--accent);
+  color: var(--paper);
+}
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---- Links ---------------------------------------------------------------- */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ---- The asterisk / ASCII divider ---------------------------------------- */
+.rule {
+  display: flex;
+  justify-content: center;
+  color: var(--faint);
+  font-family: var(--font-mono);
+  letter-spacing: 0.6em;
+  margin: 2.5rem 0;
+  user-select: none;
+}
+
+/* ----------------------------------------------------------------------------
+   Long-form article typography (shared by reader pages and the editor preview).
+   Scope everything under `.prose` so the studio UI stays neutral.
+---------------------------------------------------------------------------- */
+.prose {
+  color: var(--ink);
+}
+.prose > * + * {
+  margin-top: 1.25em;
+}
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  scroll-margin-top: 5rem;
+}
+.prose h2 {
+  font-size: 1.4rem;
+  margin-top: 2.4em;
+}
+.prose h3 {
+  font-size: 1.15rem;
+  margin-top: 2em;
+}
+.prose h2 .anchor,
+.prose h3 .anchor {
+  color: var(--faint);
+  opacity: 0;
+  margin-left: 0.4em;
+  font-weight: 400;
+  transition: opacity 0.15s;
+}
+.prose h2:hover .anchor,
+.prose h3:hover .anchor {
+  opacity: 1;
+}
+.prose p {
+  hyphens: auto;
+}
+.prose strong {
+  font-weight: 600;
+}
+.prose em {
+  font-style: italic;
+}
+.prose a {
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.15s;
+}
+.prose a:hover {
+  text-decoration-color: var(--accent);
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.4em;
+}
+.prose ul {
+  list-style: none;
+}
+.prose ul > li {
+  position: relative;
+}
+.prose ul > li::before {
+  content: "—";
+  position: absolute;
+  left: -1.4em;
+  color: var(--faint);
+}
+.prose ol {
+  list-style: decimal;
+}
+.prose blockquote {
+  border-left: 2px solid var(--accent);
+  padding-left: 1.1em;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ---- Inline + block code (Shiki sets its own colors via inline styles) ---- */
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  background: var(--code-bg);
+  padding: 0.12em 0.36em;
+  border-radius: 4px;
+}
+.prose pre {
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  line-height: 1.6;
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+}
+.prose pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+}
+
+/* ---- Figures (anime / diagrams) ------------------------------------------ */
+.prose figure {
+  margin: 2rem 0;
+  text-align: center;
+}
+.prose figure img {
+  display: inline-block;
+  max-width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+.prose figcaption {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--faint);
+  margin-top: 0.6rem;
+}
+
+/* ---- Callouts ------------------------------------------------------------- */
+.callout {
+  display: flex;
+  gap: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.9rem 1.05rem;
+  background: var(--code-bg);
+  font-size: 0.96em;
+}
+.callout .callout-icon {
+  flex: none;
+  font-size: 1.1em;
+  line-height: 1.6;
+}
+
+/* ---- Shiki dual-theme: swap CSS vars on .dark ---------------------------- */
+.prose pre.shiki,
+.prose pre.shiki span {
+  color: var(--shiki-light);
+  background-color: transparent;
+}
+.prose pre.shiki {
+  background-color: var(--shiki-light-bg);
+}
+.dark .prose pre.shiki,
+.dark .prose pre.shiki span {
+  color: var(--shiki-dark);
+}
+.dark .prose pre.shiki {
+  background-color: var(--shiki-dark-bg);
+}
+
+/* ---- Table of contents: fixed in the left gutter on wide screens --------- */
+.toc-fixed {
+  display: none;
+}
+@media (min-width: 1180px) {
+  .toc-fixed {
+    display: block;
+    position: fixed;
+    top: 7.5rem;
+    left: calc((100vw - 44rem) / 2 - 13.5rem);
+    width: 12rem;
+    max-height: 72vh;
+    overflow-y: auto;
+    line-height: 1.55;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   Studio (authoring) — neutral, tool-like chrome around the BlockNote editor.
+---------------------------------------------------------------------------- */
+.studio {
+  padding-top: 0.5rem;
+}
+.studio-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 1rem;
+}
+.studio-meta {
+  flex: 1 1 24rem;
+  min-width: 18rem;
+}
+.studio-title {
+  width: 100%;
+  font-size: 1.5rem;
+  font-weight: 600;
+  background: transparent;
+  color: var(--ink);
+  border: none;
+  outline: none;
+}
+.studio-summary {
+  width: 100%;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  outline: none;
+}
+.studio-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.6rem;
+  font-size: 0.72rem;
+  color: var(--faint);
+}
+.studio-fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.studio-draft {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 4px;
+  align-self: flex-end;
+}
+.studio-fields input[type="text"],
+.studio-fields input:not([type]) {
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 3px 6px;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+.studio-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.studio-load {
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 5px 8px;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+.studio-status {
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--accent);
+}
+.studio-editor {
+  margin-top: 1rem;
+  min-height: 60vh;
+}
+.studio-hint {
+  margin-top: 1.5rem;
+  font-size: 0.72rem;
+  color: var(--faint);
+}
+.studio-hint kbd {
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0 4px;
+}
+
+/* Buttons shared by studio + custom blocks */
+.math-btn {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  background: var(--code-bg);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 4px 9px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.math-btn:hover {
+  border-color: var(--accent);
+}
+.math-btn.primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+.math-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* Math block (editor) */
+.math-view {
+  cursor: pointer;
+  padding: 0.4rem 0;
+  border-radius: 6px;
+}
+.math-view:hover {
+  background: var(--code-bg);
+}
+.math-panel {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.8rem;
+  background: var(--code-bg);
+  font-family: var(--font-mono);
+}
+.math-live {
+  min-height: 2.2rem;
+  padding: 0.4rem;
+  background: var(--paper);
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  overflow-x: auto;
+}
+.math-input {
+  width: 100%;
+  margin-top: 0.5rem;
+  min-height: 3.5rem;
+  resize: vertical;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.5rem;
+}
+.math-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+.math-desc {
+  flex: 1 1 12rem;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 4px 8px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+.math-err {
+  margin-top: 0.5rem;
+  color: var(--accent);
+  font-size: 0.75rem;
+}
+.math-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+/* Callout controls in-editor */
+.callout {
+  position: relative;
+}
+.callout-kind {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--faint);
+}
+.callout-body {
+  flex: 1;
+}
+
+/* Anime / image block (editor) */
+.anime-empty {
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  padding: 1rem;
+  background: var(--code-bg);
+}
+.anime-row {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+.anime-or {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--faint);
+}
+.anime-url,
+.anime-cap {
+  width: 100%;
+  margin-top: 0.5rem;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 4px 8px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+.anime-fig {
+  text-align: center;
+}
+.anime-fig img {
+  max-width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+.anime-clear {
+  margin-top: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--faint);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Keep the BlockNote editor readable in our theme */
+.studio-editor .bn-container {
+  font-family: var(--font-sans);
+}
+
+/* ---- KaTeX sizing tweaks -------------------------------------------------- */
+.katex-display {
+  margin: 1.6rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0;
+}
+.katex {
+  font-size: 1.05em;
+}

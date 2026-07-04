@@ -2,7 +2,29 @@
   "permissions": {
     "allow": [
       "WebFetch(domain:alisawuffles.notion.site)",
-      "WebFetch(domain:www.maxmynter.com)"
+      "WebFetch(domain:www.maxmynter.com)",
+      "WebFetch(domain:fergusfinn.com)",
+      "Bash(curl -s -o /dev/null -w \"home:%{http_code} \" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"post:%{http_code}\\\\n\" http://localhost:3000/blog/reparameterization-trick)",
+      "Bash(npm install *)",
+      "Bash(curl -s -o /dev/null -w \"studio:%{http_code}\\\\n\" http://localhost:3000/studio)",
+      "Bash(curl -s -o /dev/null -w \"api/posts:%{http_code}\\\\n\" http://localhost:3000/api/posts)",
+      "Bash(npx next *)",
+      "Bash(npm run *)",
+      "Bash(curl -s -o /dev/null http://localhost:3000/api/posts)",
+      "Bash(curl -s -X POST http://localhost:3000/api/posts -H 'Content-Type: application/json' -d '{ *)",
+      "Bash(curl -s http://localhost:3000/api/posts)",
+      "Bash(curl -s -w \"\\\\nHTTP %{http_code}\\\\n\" -X POST http://localhost:3000/api/posts -H \"Content-Type: application/json\" -d '{\"slug\":\"studio-roundtrip-test\",\"title\":\"Studio Roundtrip Test\",\"date\":\"2026-07-03\",\"tags\":[\"test\"],\"summary\":\"verify\",\"draft\":false,\"blocks\":[{\"type\":\"paragraph\",\"content\":[{\"type\":\"text\",\"text\":\"hi\",\"styles\":{}}]}]}')",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/blog/studio-roundtrip-test)",
+      "Skill(claude-api)",
+      "PowerShell($c = Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue; if \\($c\\) { $c.OwningProcess | Select-Object -Unique | ForEach-Object { Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue; \"stopped PID $_\" } } else { \"no listener on 3000\" })",
+      "Bash(curl -s -w \"\\\\nHTTP %{http_code}\\\\n\" -X POST http://localhost:3000/api/math -H \"Content-Type: application/json\" -d '{\"describe\":\"integral of x squared from 0 to 1\"}')",
+      "PowerShell($c = Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue; if \\($c\\) { $c.OwningProcess | Select-Object -Unique | ForEach-Object { Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue } }; \"done\")",
+      "Bash(curl -s -o /dev/null http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/studio)",
+      "Bash(echo \"up: home=$\\(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/\\) studio=$\\(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/studio\\)\")",
+      "Bash(git add *)"
     ]
   }
 }

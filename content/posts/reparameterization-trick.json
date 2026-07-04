@@ -1,0 +1,118 @@
+{
+  "slug": "reparameterization-trick",
+  "title": "the reparameterization trick, finally",
+  "date": "2026-06-27",
+  "tags": ["ml", "vae", "math"],
+  "summary": "Why you can't just backprop through a sample — and the one-line change that fixes it.",
+  "draft": false,
+  "blocks": [
+    {
+      "type": "paragraph",
+      "content": [
+        { "type": "text", "text": "Training a VAE means optimizing an objective that contains an expectation over a distribution whose parameters we are trying to learn. That sounds harmless until you try to take the gradient.", "styles": {} }
+      ]
+    },
+    {
+      "type": "heading",
+      "props": { "level": 2 },
+      "content": [{ "type": "text", "text": "The problem", "styles": {} }]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        { "type": "text", "text": "We want ", "styles": {} },
+        { "type": "inlineMath", "props": { "latex": "\\nabla_{\\phi}\\, \\mathbb{E}_{q_{\\phi}(z)}\\big[f(z)\\big]" } },
+        { "type": "text", "text": ", but the distribution we are sampling from itself depends on ", "styles": {} },
+        { "type": "inlineMath", "props": { "latex": "\\phi" } },
+        { "type": "text", "text": ". You cannot push the gradient inside the expectation, and you cannot backprop through a ", "styles": {} },
+        { "type": "text", "text": "random", "styles": { "italic": true } },
+        { "type": "text", "text": " node.", "styles": {} }
+      ]
+    },
+    {
+      "type": "math",
+      "props": { "latex": "\\nabla_{\\phi}\\, \\mathbb{E}_{q_{\\phi}(z)}[f(z)] \\;\\neq\\; \\mathbb{E}_{q_{\\phi}(z)}[\\nabla_{\\phi} f(z)]" }
+    },
+    {
+      "type": "callout",
+      "props": { "kind": "note" },
+      "content": [
+        { "type": "text", "text": "The inequality is the whole point: the sampling step breaks the chain of derivatives between the loss and ", "styles": {} },
+        { "type": "inlineMath", "props": { "latex": "\\phi" } },
+        { "type": "text", "text": ".", "styles": {} }
+      ]
+    },
+    {
+      "type": "heading",
+      "props": { "level": 2 },
+      "content": [{ "type": "text", "text": "The trick", "styles": {} }]
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        { "type": "text", "text": "Instead of sampling ", "styles": {} },
+        { "type": "inlineMath", "props": { "latex": "z \\sim \\mathcal{N}(\\mu_{\\phi}, \\sigma_{\\phi}^2)" } },
+        { "type": "text", "text": " directly, sample noise from a fixed distribution and shift it. The randomness moves to a leaf that carries no parameters:", "styles": {} }
+      ]
+    },
+    {
+      "type": "math",
+      "props": { "latex": "z = \\mu_{\\phi} + \\sigma_{\\phi} \\odot \\epsilon, \\qquad \\epsilon \\sim \\mathcal{N}(0, I)" }
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        { "type": "text", "text": "Now ", "styles": {} },
+        { "type": "inlineMath", "props": { "latex": "z" } },
+        { "type": "text", "text": " is a deterministic, differentiable function of ", "styles": {} },
+        { "type": "inlineMath", "props": { "latex": "\\phi" } },
+        { "type": "text", "text": " given a fixed ", "styles": {} },
+        { "type": "inlineMath", "props": { "latex": "\\epsilon" } },
+        { "type": "text", "text": ", so gradients flow straight through.", "styles": {} }
+      ]
+    },
+    {
+      "type": "heading",
+      "props": { "level": 3 },
+      "content": [{ "type": "text", "text": "In code", "styles": {} }]
+    },
+    {
+      "type": "codeBlock",
+      "props": {
+        "language": "python",
+        "code": "def reparameterize(mu, logvar):\n    std = torch.exp(0.5 * logvar)\n    eps = torch.randn_like(std)   # noise, no grad needed\n    return mu + eps * std         # differentiable in mu, logvar"
+      }
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        { "type": "text", "text": "That is the entire idea. Three lines, and the gradient estimator goes from high-variance score-function nonsense to something you can actually train.", "styles": {} }
+      ]
+    },
+    {
+      "type": "callout",
+      "props": { "kind": "tip" },
+      "content": [
+        { "type": "text", "text": "Parameterize ", "styles": {} },
+        { "type": "inlineMath", "props": { "latex": "\\log \\sigma^2" } },
+        { "type": "text", "text": " instead of ", "styles": {} },
+        { "type": "inlineMath", "props": { "latex": "\\sigma" } },
+        { "type": "text", "text": " so the network can output any real number and you stay numerically stable.", "styles": {} }
+      ]
+    },
+    {
+      "type": "image",
+      "props": {
+        "url": "/anime/gojo.png",
+        "caption": "me, finally seeing the gradients flow",
+        "width": 320
+      }
+    },
+    {
+      "type": "paragraph",
+      "content": [
+        { "type": "text", "text": "Next time: why the $D_{KL}(q \\| p)$ term has a closed form for Gaussians, and how that saves you another sampling headache. (And yes — inline math like $e^{i\\pi}+1=0$ just works too.)", "styles": {} }
+      ]
+    }
+  ]
+}
