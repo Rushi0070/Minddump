@@ -1,0 +1,49 @@
+{
+  "slug": "hi-this-is-me-",
+  "title": "Untitled",
+  "date": "2026-07-04",
+  "tags": [],
+  "summary": "",
+  "draft": false,
+  "blocks": [
+    {
+      "id": "18a97998-634a-4dc3-895e-5292f66028e3",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "I am a Grad student at Stony Brook university studying Data Science ",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "bab04b62-c3ce-40fa-9c26-dd2f92a64ad4",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [],
+      "children": []
+    },
+    {
+      "id": "1d60988a-57c3-4282-9350-85d54cc625ec",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [],
+      "children": []
+    }
+  ]
+}
