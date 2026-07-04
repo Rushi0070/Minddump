@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getPost, getAllSlugs, formatDate, getHeadings } from "@/lib/posts";
 import { renderBlocks } from "@/components/renderBlocks";
 import Toc from "@/components/Toc";
+import Lightbox from "@/components/Lightbox";
 
 export const dynamicParams = false;
 
@@ -43,6 +44,7 @@ export default async function PostPage({
       </header>
 
       <div className="prose mt-10">{body}</div>
+      <Lightbox />
 
       <div className="rule" aria-hidden>
         * * *
