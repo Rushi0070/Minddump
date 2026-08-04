@@ -18,954 +18,137 @@
       "children": []
     },
     {
-      "id": "1d60988a-57c3-4282-9350-85d54cc625ec",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "The course gives you a glimpse of how rl is applied and what is the framework of rl ",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "dce84b7d-b8aa-4e3a-9783-87228913ab16",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "My goal would be to understand and implement that in some way ",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "55f95669-28c4-4305-b2c1-e2a99b5f775e",
-      "type": "image",
-      "props": {
-        "backgroundColor": "default",
-        "textAlignment": "center",
-        "name": "image.png",
-        "url": "/uploads/1783205310989-image.png",
-        "caption": "",
-        "showPreview": true,
-        "previewWidth": 556
-      },
-      "children": []
-    },
-    {
-      "id": "f3faf893-5fd4-4a2a-b9cd-bcb784e7f5fb",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "Good clarification — that \"developer, research-adjacent, not core research\" framing changes the target meaningfully. You don't need to derive PPO from scratch or read theory papers; you need to ",
-          "styles": {}
-        },
-        {
-          "type": "text",
-          "text": "understand the math well enough to implement, debug, and reason about",
-          "styles": {
-            "italic": true
-          }
-        },
-        {
-          "type": "text",
-          "text": " the post-training stack. That's a different and more achievable bar. Let me build you the ",
-          "styles": {}
-        },
-        {
-          "type": "link",
-          "href": "http://map.Here",
-          "content": [
-            {
-              "type": "text",
-              "text": "map.Here",
-              "styles": {}
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "text": "'s the roadmap. I've built it around your actual target — developer, research-adjacent — so the emphasis is \"understand enough math to build and debug,\" not \"derive from first principles.\"Now the math. Here's the honest scope for a developer/research-adjacent role: you need to ",
-          "styles": {}
-        },
-        {
-          "type": "text",
-          "text": "read, implement, and debug",
-          "styles": {
-            "italic": true
-          }
-        },
-        {
-          "type": "text",
-          "text": " these equations, not prove them. I'll give you each one with what it means and — critically — the minimum background that unlocks it, so you're not studying math you won't use.",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "84384e9b-1330-499e-beb8-d147e4fc3762",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": " ",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "eb778590-9d0d-44f7-a2a1-92ba328bf8dc",
-      "type": "heading",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left",
-        "level": 2,
-        "isToggleable": false
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "The math you actually need, in layers",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "1811e33f-9b8f-4ada-80ef-4b2e7f1b8e4d",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "Layer 0 — prerequisites (have these solid first)",
-          "styles": {
-            "bold": true
-          }
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "68d39a11-3445-4598-93ac-a86e623b953d",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "These are the load-bearing tools. Everything else is built from them:",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "9c3f8793-04ca-470f-9459-fb2811a2c536",
-      "type": "bulletListItem",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "Probability & expectation.",
-          "styles": {
-            "bold": true
-          }
-        },
-        {
-          "type": "text",
-          "text": " $\\mathbb{E}[X] = \\sum_x x,p(x)$. You must be fluent with expectations, conditional probability, and sampling — because ",
-          "styles": {}
-        },
-        {
-          "type": "text",
-          "text": "every",
-          "styles": {
-            "italic": true
-          }
-        },
-        {
-          "type": "text",
-          "text": " RL objective is an expectation you estimate by sampling. This is the single most-used concept.",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "b1f281db-b06c-4025-b85b-59cbd43ca574",
-      "type": "bulletListItem",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "Log and its gradient.",
-          "styles": {
-            "bold": true
-          }
-        },
-        {
-          "type": "text",
-          "text": " $\\frac{d}{d\\theta}\\log f(\\theta) = \\frac{f'(\\theta)}{f(\\theta)}$. The whole policy-gradient trick rests on this.",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "a45c1221-9b7e-4c00-ac3b-e9ccf12f2da2",
-      "type": "bulletListItem",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "Gradient descent / the chain rule.",
-          "styles": {
-            "bold": true
-          }
-        },
-        {
-          "type": "text",
-          "text": " You already have this from deep learning. ",
-          "styles": {}
-        },
-        {
-          "type": "text",
-          "text": "loss.backward()",
-          "styles": {
-            "code": true
-          }
-        },
-        {
-          "type": "text",
-          "text": " mechanics, nothing exotic.",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "5efa5876-cfc5-4246-b5a9-3fb19961f3cc",
-      "type": "bulletListItem",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "KL divergence.",
-          "styles": {
-            "bold": true
-          }
-        },
-        {
-          "type": "text",
-          "text": " $D_{KL}(P|Q) = \\sum_x P(x)\\log\\frac{P(x)}{Q(x)}$. Read it as \"how far distribution P has drifted from Q.\" Used everywhere as a leash to stop the model changing too fast.",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "8acf6d86-58f3-4391-927f-2224cef21e5f",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "If those four feel shaky, that's where to spend the first days — they pay off in every equation below.",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "06c9b20d-07b8-4bf8-8b48-c67ad44c7b5a",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "Layer 1 — the RL core (Phase 1)",
-          "styles": {
-            "bold": true
-          }
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "19243752-4a32-4965-9dd7-9dad0a303074",
-      "type": "bulletListItem",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "Return:",
-          "styles": {
-            "bold": true
-          }
-        },
-        {
-          "type": "text",
-          "text": " $G_t = \\sum_{k=0}^{\\infty}\\gamma^k R_{t+k+1}$ — discounted sum of future rewards. You've seen this.",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "a39d54a4-8208-4492-8364-bc6a081baed8",
-      "type": "bulletListItem",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "Value & Q:",
-          "styles": {
-            "bold": true
-          }
-        },
-        {
-          "type": "text",
-          "text": " $V^\\pi(s)=\\mathbb{E}",
-          "styles": {}
-        },
-        {
-          "type": "text",
-          "text": "\\pi[G_t\\mid s]$, $Q^\\pi(s,a)=\\mathbb{E}",
-          "styles": {
-            "italic": true
-          }
-        },
-        {
-          "type": "text",
-          "text": "\\pi[G_t\\mid s,a]$. Covered already.",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "1c6c8fe0-6d72-446a-839f-dab5a1f74289",
-      "type": "bulletListItem",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "Advantage:",
-          "styles": {
-            "bold": true
-          }
-        },
-        {
-          "type": "text",
-          "text": " $A(s,a) = Q(s,a) - V(s)$. Read it as \"how much better was this action than the average action here.\" This is the quantity RL actually pushes on — remember it, it's everywhere in Phase 2/3.",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "eca2000a-1d31-42ff-9094-ecf63dc7f660",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "Layer 2 — the policy-gradient bridge (Phase 2, the important one)",
-          "styles": {
-            "bold": true
-          }
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "ed0d492c-0486-4fde-a991-09e090d81dbb",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "This is the equation that turns \"RL\" into \"training an LLM.\" The ",
-          "styles": {}
-        },
-        {
-          "type": "text",
-          "text": "policy gradient",
-          "styles": {
-            "bold": true
-          }
-        },
-        {
-          "type": "text",
-          "text": ":",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "9370ee46-0c57-4a86-886b-5e71a74d1bed",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "$$\\nabla_\\theta J(\\theta) = \\mathbb{E}\\big[, \\nabla_\\theta \\log \\pi_\\theta(a\\mid s); A(s,a),\\big]$$",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "4c0f46d7-d251-475f-9f0b-f88d2510df33",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "Reading it in plain terms: to improve, nudge the policy's parameters θ in the direction that raises the log-probability of actions, ",
-          "styles": {}
-        },
-        {
-          "type": "text",
-          "text": "weighted by their advantage",
-          "styles": {
-            "italic": true
-          }
-        },
-        {
-          "type": "text",
-          "text": ". Good action (positive A) → make it more likely. Bad action (negative A) → make it less likely. That $\\nabla_\\theta \\log \\pi_\\theta$ is exactly the \"log gradient\" from Layer 0 — this is why that prerequisite matters. ",
-          "styles": {}
-        },
-        {
-          "type": "text",
-          "text": "If you understand this one equation deeply, 80% of LLM RL clicks into place.",
-          "styles": {
-            "bold": true
-          }
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "f14f25f5-7574-4e8f-b434-da855bea656c",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "Then ",
-          "styles": {}
-        },
-        {
-          "type": "text",
-          "text": "PPO",
-          "styles": {
-            "bold": true
-          }
-        },
-        {
-          "type": "text",
-          "text": " just wraps this in a safety clip so updates don't get too large:",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "b314901a-ec7f-42a6-be53-37f69a658181",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "$$L^{\\text{PPO}}(\\theta) = \\mathbb{E}\\Big[\\min\\big(r_t(\\theta)A_t,; \\text{clip}(r_t(\\theta),,1-\\epsilon,,1+\\epsilon),A_t\\big)\\Big], \\quad r_t(\\theta)=\\frac{\\pi_\\theta(a_t\\mid s_t)}{\\pi_{\\theta_{\\text{old}}}(a_t\\mid s_t)}$$",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "26cd6339-d7a0-47c6-8473-ecad8551732d",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "Don't be scared by it. $r_t$ is just \"how much more likely is this action under the new policy vs the old one\" — a ratio. The clip says \"if that ratio strays outside $[1-\\epsilon, 1+\\epsilon]$, stop rewarding further movement.\" That's the entire trick: it's the plain policy gradient plus a guardrail. At implementation level, that's all you need to hold.",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "ec78b04f-3ff2-4022-ade8-aae77113da52",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "Layer 3 — the modern stack (Phase 3, what gets you hired)",
-          "styles": {
-            "bold": true
-          }
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "69bfd66e-78e5-431d-94a1-31078ea88b5d",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "DPO",
-          "styles": {
-            "bold": true
-          }
-        },
-        {
-          "type": "text",
-          "text": " — the \"skip RL entirely\" one. You don't need its full derivation, but know the shape:",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "fbce0820-4d03-4d39-a065-8230d839feb4",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "$$L^{\\text{DPO}} = -\\mathbb{E}",
-          "styles": {}
-        },
-        {
-          "type": "text",
-          "text": "{(x,y_w,y_l)}\\Big[\\log \\sigma\\big(\\beta \\log\\tfrac{\\pi",
-          "styles": {
-            "italic": true
-          }
-        },
-        {
-          "type": "text",
-          "text": "\\theta(y_w\\mid x)}{\\pi_{\\text{ref}}(y_w\\mid x)} - \\beta\\log\\tfrac{\\pi_\\theta(y_l\\mid x)}{\\pi_{\\text{ref}}(y_l\\mid x)}\\big)\\Big]",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "3669f993-2063-43b3-943b-a658563ac409",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "$$",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "3c673e78-ad67-4361-a340-572b1ce91244",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "$y_w$ = the preferred (\"winning\") response, $y_l$ = the rejected one. In words: raise the probability of the chosen response relative to the rejected one, measured against a frozen reference model, squashed through a sigmoid $\\sigma$. It's essentially a ",
-          "styles": {}
-        },
-        {
-          "type": "text",
-          "text": "classification loss on preference pairs",
-          "styles": {
-            "bold": true
-          }
-        },
-        {
-          "type": "text",
-          "text": " — which is why it needs no reward model and no rollouts. That's the whole appeal.",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "c310267e-bef1-4267-b6a0-95a3415bede6",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "GRPO",
-          "styles": {
-            "bold": true
-          }
-        },
-        {
-          "type": "text",
-          "text": " — the one to know cold for 2026. The key math is how it computes advantage ",
-          "styles": {}
-        },
-        {
-          "type": "text",
-          "text": "without a critic",
-          "styles": {
-            "italic": true
-          }
-        },
-        {
-          "type": "text",
-          "text": ", using the group of sampled responses:",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "8308c59c-7515-4372-850b-bd27f281af78",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "$$\\hat{A}_i = \\frac{r_i - \\text{mean}(r_1,\\dots,r_G)}{\\text{std}(r_1,\\dots,r_G)}$$",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "afa685f6-6626-4028-b811-d8e5a22e9a76",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "That's it — it's a ",
-          "styles": {}
-        },
-        {
-          "type": "text",
-          "text": "z-score",
-          "styles": {
-            "bold": true
-          }
-        },
-        {
-          "type": "text",
-          "text": ". For a given prompt you sample G responses, score each with a reward $r_i$, and the advantage of response $i$ is just \"how many standard deviations above the group average was it.\" That normalized advantage drops straight into the same PPO-style clipped objective from Layer 2. So GRPO = PPO's objective, but the expensive learned critic is replaced by this one-line statistic over a batch of rollouts. If you can explain ",
-          "styles": {}
-        },
-        {
-          "type": "text",
-          "text": "this substitution",
-          "styles": {
-            "italic": true
-          }
-        },
-        {
-          "type": "text",
-          "text": ", you've demonstrated exactly the fluency the job postings screen for.",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "7597483a-bbc0-4176-af23-9a836a945801",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "RLVR",
-          "styles": {
-            "bold": true
-          }
-        },
-        {
-          "type": "text",
-          "text": " isn't really an equation — it's the reward ",
-          "styles": {}
-        },
-        {
-          "type": "text",
-          "text": "source",
-          "styles": {
-            "italic": true
-          }
-        },
-        {
-          "type": "text",
-          "text": ": $r_i = 1$ if the answer is verifiably correct (test passes, math answer matches), else $0$, usually plus a small format reward. Trivial math, big idea.",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "b2b6831d-5435-42ce-ab58-abc3cbd5775f",
-      "type": "heading",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left",
-        "level": 2,
-        "isToggleable": false
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "What you can safely skip",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "829c3c5d-553e-467e-941b-c49e9b70e04c",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "Since you're developer-track, not core-research, deliberately ",
-          "styles": {}
-        },
-        {
-          "type": "text",
-          "text": "don't",
-          "styles": {
-            "italic": true
-          }
-        },
-        {
-          "type": "text",
-          "text": " sink time into: full proofs of the policy gradient theorem, measure-theoretic probability, the PPO trust-region/TRPO derivation with Fisher matrices, or convergence guarantees. Knowing they exist is enough. Interviewers for developer-leaning roles test whether you can reason about and implement these, not whether you can rederive them on a board.",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "6c1c5f86-bfb7-4183-9f64-7dd9d5e3c504",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "The tightest possible summary of the whole math path: get fluent with ",
-          "styles": {}
-        },
-        {
-          "type": "text",
-          "text": "expectations, log-gradients, and KL",
-          "styles": {
-            "bold": true
-          }
-        },
-        {
-          "type": "text",
-          "text": " → understand ",
-          "styles": {}
-        },
-        {
-          "type": "text",
-          "text": "advantage",
-          "styles": {
-            "bold": true
-          }
-        },
-        {
-          "type": "text",
-          "text": " → understand the ",
-          "styles": {}
-        },
-        {
-          "type": "text",
-          "text": "policy gradient equation",
-          "styles": {
-            "bold": true
-          }
-        },
-        {
-          "type": "text",
-          "text": " → everything after (PPO, DPO, GRPO) is a variation on it. That's a realistic few-weeks target alongside the coding.",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
-      "id": "48e1a8b9-972d-4ccb-8052-0570f15bf048",
-      "type": "paragraph",
-      "props": {
-        "textColor": "default",
-        "backgroundColor": "default",
-        "textAlignment": "left"
-      },
-      "content": [
-        {
-          "type": "text",
-          "text": "Tap any phase in the roadmap and I'll expand it into a concrete week-by-week plan with specific models, datasets, and the exact TRL/Unsloth code path. If you tell me your hardware and timeline, I'll tailor Phase 3 and the capstone precisely.",
-          "styles": {}
-        }
-      ],
-      "children": []
-    },
-    {
       "id": "6994a5a9-6e2b-4d15-ba29-dda26dd4a75b",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "ok we talk about somethings here like agent , state , rewards and env ",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "80d722e4-ce15-4b05-a428-6898a29a6920",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "we'll go with an intuition first approach that would allows us to think critical question which would helps us to connect concepts together ",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "db135746-99a4-460a-8e90-cafe5a360380",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [],
+      "children": []
+    },
+    {
+      "id": "81fc9dca-8241-4a95-83cb-c2c342f1acf1",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "so far I'll write down things which are done \nnon -deterministic and deterministic env ",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "26617081-039b-4c8f-a78d-67597b32957a",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "rewards design how sparse /dense  ",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "c249c494-f4ae-4f6e-9ff1-af99b261ab51",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "model based and model free ",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "f8b826c9-5f83-4ed8-a5cf-214ec0dac2de",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "what is the equivalent of sample data point in RL ",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "2001af43-0088-4f32-9eb2-44b9ba7f7faf",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "exploration vs exploitation phantom trajectories  ",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "663e768c-ad96-46c1-a07b-670e985463a9",
       "type": "paragraph",
       "props": {
         "textColor": "default",

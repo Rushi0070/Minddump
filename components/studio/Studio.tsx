@@ -4,7 +4,7 @@ import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 import "katex/dist/katex.min.css";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { BlockNoteSchema, defaultBlockSpecs, filterSuggestionItems, insertOrUpdateBlock } from "@blocknote/core";
 import { useCreateBlockNote, SuggestionMenuController, getDefaultReactSlashMenuItems } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
@@ -12,7 +12,11 @@ import { MathBlock } from "./blocks/MathBlock";
 import { CalloutBlock } from "./blocks/CalloutBlock";
 import { AnimeBlock } from "./blocks/AnimeBlock";
 import { SidenoteBlock } from "./blocks/SidenoteBlock";
-import { slugify } from "@/lib/slug";
+import { ToggleBlock } from "./blocks/ToggleBlock";
+import { slugify, readingStats } from "@/lib/slug";
+
+// Where in-progress work is mirrored so a refresh or crash never loses it.
+const AUTOSAVE_KEY = "studio:autosave";
 
 const schema = BlockNoteSchema.create({
   blockSpecs: {
@@ -21,6 +25,7 @@ const schema = BlockNoteSchema.create({
     callout: CalloutBlock,
     anime: AnimeBlock,
     sidenote: SidenoteBlock,
+    toggle: ToggleBlock,
   },
 });
 
@@ -31,6 +36,8 @@ type PostSummary = {
   tags: string[];
   summary: string;
   draft?: boolean;
+  cover?: string;
+  coverCredit?: string;
   blocks: any[];
 };
 
@@ -60,8 +67,12 @@ export default function Studio() {
   const [summary, setSummary] = useState("");
   const [date, setDate] = useState(today());
   const [draft, setDraft] = useState(false);
+  const [cover, setCover] = useState("");
+  const [coverCredit, setCoverCredit] = useState("");
+  const [coverBusy, setCoverBusy] = useState(false);
   const [existing, setExisting] = useState<PostSummary[]>([]);
   const [status, setStatus] = useState("");
+  const [stats, setStats] = useState({ words: 0, minutes: 1 });
 
   useEffect(() => {
     if (!slugTouched) setSlug(slugify(title));
@@ -80,6 +91,103 @@ export default function Studio() {
     refreshList();
   }, []);
 
+  // One place that assembles the current working state into a post object.
+  // Both saving and autosaving use it, so they can never drift apart.
+  const gatherDraft = useCallback(() => {
+    return {
+      slug: slugify(slug || title),
+      title: title || "Untitled",
+      date,
+      tags: tags
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean),
+      summary,
+      draft,
+      cover: cover.trim(),
+      coverCredit: coverCredit.trim(),
+      blocks: editor.document,
+    };
+  }, [slug, title, date, tags, summary, draft, cover, coverCredit, editor]);
+
+  // Recompute the live word count / reading time from the editor's content.
+  const recomputeStats = useCallback(() => {
+    setStats(readingStats(editor.document as any));
+  }, [editor]);
+
+  // --- Autosave -------------------------------------------------------------
+  // Mirror the whole working draft to localStorage shortly after any change,
+  // so an accidental refresh or crash never loses work. Debounced so we are not
+  // hammering storage on every keystroke.
+  const autosaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const restored = useRef(false);
+  // Always points at the latest save(); lets the keyboard shortcut call it
+  // without re-registering the listener on every render.
+  const saveRef = useRef<() => void>(() => {});
+
+  const scheduleAutosave = useCallback(() => {
+    if (autosaveTimer.current) clearTimeout(autosaveTimer.current);
+    autosaveTimer.current = setTimeout(() => {
+      try {
+        const snapshot = { ...gatherDraft(), savedAt: Date.now() };
+        localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(snapshot));
+      } catch {
+        /* storage full or unavailable — non-fatal */
+      }
+    }, 800);
+  }, [gatherDraft]);
+
+  // On first mount, offer to restore an unsaved draft from a previous session.
+  useEffect(() => {
+    if (restored.current) return;
+    restored.current = true;
+    try {
+      const raw = localStorage.getItem(AUTOSAVE_KEY);
+      if (!raw) return;
+      const snap = JSON.parse(raw);
+      const hasContent =
+        (snap.title && snap.title !== "Untitled") ||
+        (Array.isArray(snap.blocks) &&
+          snap.blocks.some((b: any) => (b.content?.length ?? 0) > 0));
+      if (!hasContent) return;
+      setTitle(snap.title === "Untitled" ? "" : snap.title || "");
+      setSlug(snap.slug || "");
+      setSlugTouched(true);
+      setTags((snap.tags || []).join(", "));
+      setSummary(snap.summary || "");
+      setDate(snap.date || today());
+      setDraft(!!snap.draft);
+      setCover(snap.cover || "");
+      setCoverCredit(snap.coverCredit || "");
+      if (Array.isArray(snap.blocks) && snap.blocks.length) {
+        editor.replaceBlocks(editor.document, snap.blocks as any);
+      }
+      setStatus("restored your unsaved draft (from this browser)");
+      recomputeStats();
+    } catch {
+      /* ignore malformed autosave */
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Re-run autosave whenever any metadata field changes (editor content changes
+  // are handled by the editor's onChange below).
+  useEffect(() => {
+    scheduleAutosave();
+  }, [title, slug, tags, summary, date, draft, cover, coverCredit, scheduleAutosave]);
+
+  // Ctrl/Cmd+S saves, instead of opening the browser's "save page" dialog.
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        saveRef.current();
+      }
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
   function loadPost(p: PostSummary) {
     setTitle(p.title);
     setSlug(p.slug);
@@ -88,10 +196,13 @@ export default function Studio() {
     setSummary(p.summary || "");
     setDate(p.date || today());
     setDraft(!!p.draft);
+    setCover(p.cover || "");
+    setCoverCredit(p.coverCredit || "");
     try {
       if (Array.isArray(p.blocks) && p.blocks.length) {
         editor.replaceBlocks(editor.document, p.blocks as any);
       }
+      recomputeStats();
       setStatus(`loaded "${p.title}"`);
     } catch (e: any) {
       setStatus(`couldn't load blocks: ${e?.message || e}`);
@@ -114,6 +225,8 @@ export default function Studio() {
         .filter(Boolean),
       summary,
       draft,
+      cover: cover.trim(),
+      coverCredit: coverCredit.trim(),
       blocks: editor.document,
     };
     try {
@@ -137,6 +250,8 @@ export default function Studio() {
     const s = await doSave();
     if (s) setStatus(`saved → content/posts/${s}.json  ·  view at /blog/${s}`);
   }
+  // Keep the shortcut pointed at the current save closure.
+  saveRef.current = save;
 
   async function publish() {
     setStatus("saving…");
@@ -169,22 +284,64 @@ export default function Studio() {
     setSummary("");
     setDate(today());
     setDraft(false);
+    setCover("");
+    setCoverCredit("");
     editor.replaceBlocks(editor.document, [
       { type: "paragraph", content: "" },
     ] as any);
+    try {
+      localStorage.removeItem(AUTOSAVE_KEY);
+    } catch {
+      /* ignore */
+    }
+    setStats({ words: 0, minutes: 1 });
     setStatus("new post");
+  }
+
+  // Upload a chosen file and use its URL as the post's cover image. Reuses the
+  // same /api/upload endpoint the in-editor image blocks use.
+  async function onCoverPick(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setCoverBusy(true);
+    try {
+      const url = await uploadFile(file);
+      setCover(url);
+    } catch (err: any) {
+      setStatus(`cover upload failed: ${err?.message || err}`);
+    } finally {
+      setCoverBusy(false);
+      e.target.value = "";
+    }
   }
 
   const slashItems = useMemo(
     () => (query: string) => {
-      // Hide default media types we don't render on the static site.
-      const hidden = ["Video", "Audio", "File", "Table"];
-      const defaults = getDefaultReactSlashMenuItems(editor).filter(
-        (it: any) => !hidden.includes(it.title)
+      // A short, curated set — the handful of blocks these essays actually use,
+      // in a deliberate order. Everything else BlockNote ships (video, audio,
+      // file, check lists, emoji, toggle headings…) is intentionally left out
+      // to keep the menu calm and Word-like rather than Notion-busy.
+      const keep = [
+        "Paragraph",
+        "Heading 1",
+        "Heading 2",
+        "Heading 3",
+        "Bullet List",
+        "Numbered List",
+        "Quote",
+        "Code Block",
+        "Table",
+        "Image",
+      ];
+      const byTitle = new Map(
+        getDefaultReactSlashMenuItems(editor).map((it: any) => [it.title, it])
       );
+      const defaults = keep
+        .map((t) => byTitle.get(t))
+        .filter(Boolean) as any[];
+      // Our custom "Technical" blocks come first so they are easy to reach.
       return filterSuggestionItems(
         [
-          ...defaults,
           {
             title: "Math (equation)",
             group: "Technical",
@@ -211,6 +368,25 @@ export default function Studio() {
             onItemClick: () =>
               insertOrUpdateBlock(editor, { type: "sidenote" } as any),
           },
+          {
+            title: "Toggle (collapsible)",
+            group: "Technical",
+            aliases: ["toggle", "details", "collapse", "expand", "spoiler"],
+            subtext: "Collapsible section the reader clicks to expand",
+            icon: <span style={{ fontSize: 16 }}>▸</span>,
+            onItemClick: () =>
+              insertOrUpdateBlock(editor, { type: "toggle" } as any),
+          },
+          {
+            title: "Figure (wide image)",
+            group: "Technical",
+            aliases: ["figure", "diagram", "wide", "fullbleed", "full-bleed", "chart"],
+            subtext: "Captioned image that can break out full-bleed",
+            icon: <span style={{ fontSize: 16 }}>▭</span>,
+            onItemClick: () =>
+              insertOrUpdateBlock(editor, { type: "anime" } as any),
+          },
+          ...defaults,
         ],
         query
       );
@@ -266,6 +442,41 @@ export default function Studio() {
             value={summary}
             onChange={(e) => setSummary(e.target.value)}
           />
+          <div className="studio-cover">
+            <label className="math-btn">
+              {coverBusy ? "uploading…" : cover ? "change cover" : "+ cover image"}
+              <input
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={onCoverPick}
+              />
+            </label>
+            {cover && (
+              <>
+                <input
+                  className="studio-cover-credit"
+                  placeholder="cover credit / caption…"
+                  value={coverCredit}
+                  onChange={(e) => setCoverCredit(e.target.value)}
+                />
+                <button
+                  type="button"
+                  className="anime-clear"
+                  onClick={() => {
+                    setCover("");
+                    setCoverCredit("");
+                  }}
+                >
+                  remove
+                </button>
+              </>
+            )}
+          </div>
+          {cover && (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img className="studio-cover-preview" src={cover} alt="cover" />
+          )}
         </div>
         <div className="studio-actions">
           <button
@@ -303,7 +514,15 @@ export default function Studio() {
       {status && <div className="studio-status mono">{status}</div>}
 
       <div className="studio-editor">
-        <BlockNoteView editor={editor} slashMenu={false} theme="light">
+        <BlockNoteView
+          editor={editor}
+          slashMenu={false}
+          theme="light"
+          onChange={() => {
+            recomputeStats();
+            scheduleAutosave();
+          }}
+        >
           <SuggestionMenuController
             triggerCharacter="/"
             getItems={async (query) => slashItems(query)}
@@ -311,12 +530,18 @@ export default function Studio() {
         </BlockNoteView>
       </div>
 
-      <p className="studio-hint mono">
-        type <kbd>/</kbd> for blocks (math, code, callouts, sidenotes) · images:{" "}
-        <kbd>Ctrl</kbd>+<kbd>V</kbd> a screenshot/copied image, drag a file in, or{" "}
-        <kbd>/</kbd>image · drag an image&apos;s edge to resize · click{" "}
-        <b>publish</b> when ready
-      </p>
+      <div className="studio-footer mono">
+        <span className="studio-count">
+          {stats.words.toLocaleString()} words · {stats.minutes} min read ·
+          autosaved
+        </span>
+        <p className="studio-hint">
+          type <kbd>/</kbd> for blocks (math, code, tables, callouts, toggles,
+          sidenotes) · images: <kbd>Ctrl</kbd>+<kbd>V</kbd> a screenshot, drag a
+          file in, or <kbd>/</kbd>image · <kbd>Ctrl</kbd>+<kbd>S</kbd> to save ·
+          click <b>publish</b> when ready
+        </p>
+      </div>
     </div>
   );
 }

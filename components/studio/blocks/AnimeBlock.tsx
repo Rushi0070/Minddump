@@ -10,6 +10,9 @@ export const AnimeBlock = createReactBlockSpec(
       url: { default: "" },
       caption: { default: "" },
       width: { default: 0 },
+      // "col" = sits in the text column; "bleed" = breaks out full-bleed on the
+      // reader page (see renderBlocks + .figure-bleed).
+      size: { default: "col" },
     },
     content: "none",
   },
@@ -17,6 +20,7 @@ export const AnimeBlock = createReactBlockSpec(
     render: ({ block, editor }) => {
       const url = (block.props.url as string) || "";
       const caption = (block.props.caption as string) || "";
+      const size = (block.props.size as string) || "col";
       const [busy, setBusy] = useState(false);
 
       async function onFile(e: React.ChangeEvent<HTMLInputElement>) {
@@ -61,7 +65,10 @@ export const AnimeBlock = createReactBlockSpec(
       }
 
       return (
-        <figure className="anime-fig" contentEditable={false}>
+        <figure
+          className={`anime-fig ${size === "bleed" ? "is-bleed" : ""}`}
+          contentEditable={false}
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={url} alt={caption} />
           <input
@@ -75,14 +82,44 @@ export const AnimeBlock = createReactBlockSpec(
               })
             }
           />
-          <button
-            className="anime-clear"
-            onClick={() =>
-              editor.updateBlock(block, { type: "anime", props: { url: "" } })
-            }
-          >
-            replace
-          </button>
+          <div className="anime-controls">
+            {/* Width: sit in the column, or break out full-bleed like a
+                distill-style figure. */}
+            <div className="anime-seg" role="group" aria-label="figure width">
+              <button
+                type="button"
+                className={size !== "bleed" ? "is-on" : ""}
+                onClick={() =>
+                  editor.updateBlock(block, {
+                    type: "anime",
+                    props: { size: "col" },
+                  })
+                }
+              >
+                fit column
+              </button>
+              <button
+                type="button"
+                className={size === "bleed" ? "is-on" : ""}
+                onClick={() =>
+                  editor.updateBlock(block, {
+                    type: "anime",
+                    props: { size: "bleed" },
+                  })
+                }
+              >
+                full-bleed
+              </button>
+            </div>
+            <button
+              className="anime-clear"
+              onClick={() =>
+                editor.updateBlock(block, { type: "anime", props: { url: "" } })
+              }
+            >
+              replace
+            </button>
+          </div>
         </figure>
       );
     },

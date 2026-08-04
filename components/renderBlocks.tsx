@@ -115,8 +115,22 @@ async function renderBlock(b: Block, key: number): Promise<React.ReactNode> {
     case "code": {
       const code = b.props?.code ?? plainText(b.content) ?? "";
       const lang = (b.props?.language ?? "plaintext") as string;
+      const filename = (b.props?.filename ?? b.props?.caption) as
+        | string
+        | undefined;
       const html = await highlightCode(code, lang);
-      return <div key={key} dangerouslySetInnerHTML={{ __html: html }} />;
+      return (
+        <div key={key} className="code-block">
+          <div className="code-head mono" contentEditable={false}>
+            <span className="code-lang">{filename || lang}</span>
+            {/* The copy button is wired up client-side by <CodeCopy />. */}
+            <button type="button" className="code-copy" aria-label="Copy code">
+              copy
+            </button>
+          </div>
+          <div dangerouslySetInnerHTML={{ __html: html }} />
+        </div>
+      );
     }
     case "callout": {
       const kind = (b.props?.kind ?? "note") as string;
@@ -130,6 +144,38 @@ async function renderBlock(b: Block, key: number): Promise<React.ReactNode> {
         </div>
       );
     }
+    case "table": {
+      // BlockNote stores tables as a special content object rather than inline
+      // content: { type: "tableContent", rows: [{ cells: [...] }] }. A cell is
+      // either a raw array of inline content or an object with a `.content`.
+      const rows = (b.content as any)?.rows ?? [];
+      if (rows.length === 0) return null;
+      const cellContent = (cell: any) =>
+        Array.isArray(cell) ? cell : cell?.content ?? [];
+      const [headRow, ...bodyRows] = rows;
+      return (
+        <div key={key} className="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                {(headRow.cells ?? []).map((cell: any, c: number) => (
+                  <th key={c}>{renderInline(cellContent(cell))}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {bodyRows.map((row: any, r: number) => (
+                <tr key={r}>
+                  {(row.cells ?? []).map((cell: any, c: number) => (
+                    <td key={c}>{renderInline(cellContent(cell))}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
     case "sidenote":
     case "marginnote":
       return (
@@ -137,6 +183,15 @@ async function renderBlock(b: Block, key: number): Promise<React.ReactNode> {
           {renderInline(b.content)}
         </aside>
       );
+    case "toggle": {
+      const summary = (b.props?.summary as string) || "Details";
+      return (
+        <details key={key} className="toggle">
+          <summary>{summary}</summary>
+          <div className="toggle-content">{renderInline(b.content)}</div>
+        </details>
+      );
+    }
     case "image":
     case "anime": {
       const url = b.props?.url as string | undefined;
@@ -147,14 +202,26 @@ async function renderBlock(b: Block, key: number): Promise<React.ReactNode> {
       const align = (b.props?.textAlignment || b.props?.alignment) as
         | string
         | undefined;
-      const figStyle: React.CSSProperties | undefined =
-        align === "left"
+      // Full-bleed: the figure breaks out of the 44rem text column. Triggered
+      // explicitly (the Figure block's "full-bleed" toggle sets size:"bleed")
+      // or implicitly when an image is dragged wider than the column (~704px),
+      // so wide diagrams get room the way colah / distill lay them out.
+      const size = b.props?.size as string | undefined;
+      const bleed =
+        size === "bleed" || (typeof width === "number" && width >= 720);
+      const figStyle: React.CSSProperties | undefined = bleed
+        ? undefined
+        : align === "left"
           ? { textAlign: "left" }
           : align === "right"
             ? { textAlign: "right" }
             : undefined;
       return (
-        <figure key={key} style={figStyle}>
+        <figure
+          key={key}
+          className={bleed ? "figure-bleed" : undefined}
+          style={figStyle}
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={url}

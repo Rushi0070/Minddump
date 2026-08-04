@@ -85,6 +85,74 @@ a {
   user-select: none;
 }
 
+/* ---- Post cover image (hero) --------------------------------------------- */
+.post-cover {
+  margin: 2rem 0 0;
+}
+.post-cover img {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+.post-cover figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.72rem;
+  color: var(--faint);
+}
+
+/* ---- Reading progress bar (top of post pages) ---------------------------- */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 60;
+  background: transparent;
+  pointer-events: none;
+}
+.reading-progress-bar {
+  height: 100%;
+  background: var(--accent);
+  transform-origin: 0 50%;
+  transition: transform 0.05s linear;
+}
+
+/* ---- Previous / next post navigation ------------------------------------- */
+.post-nav {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+.post-nav-side {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.post-nav-right {
+  text-align: right;
+}
+.post-nav-link {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  max-width: 100%;
+}
+.post-nav-dir {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.post-nav-title {
+  font-size: 0.9rem;
+  color: var(--muted);
+  transition: color 0.15s;
+}
+.post-nav-link:hover .post-nav-title {
+  color: var(--accent);
+}
+
 /* ----------------------------------------------------------------------------
    Long-form article typography (shared by reader pages and the editor preview).
    Scope everything under `.prose` so the studio UI stays neutral.
@@ -114,7 +182,8 @@ a {
   margin-top: 2em;
 }
 .prose h2 .anchor,
-.prose h3 .anchor {
+.prose h3 .anchor,
+.prose h4 .anchor {
   color: var(--faint);
   opacity: 0;
   margin-left: 0.4em;
@@ -122,8 +191,22 @@ a {
   transition: opacity 0.15s;
 }
 .prose h2:hover .anchor,
-.prose h3:hover .anchor {
+.prose h3:hover .anchor,
+.prose h4:hover .anchor {
   opacity: 1;
+}
+.prose .anchor {
+  cursor: pointer;
+}
+/* Brief "copied" confirmation after clicking a heading anchor. */
+.prose .anchor.anchor-copied {
+  opacity: 1;
+  color: var(--accent);
+}
+.prose .anchor.anchor-copied::after {
+  content: " link copied";
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
 }
 .prose p {
   hyphens: auto;
@@ -194,6 +277,80 @@ a {
   font-size: inherit;
 }
 
+/* ---- Code block: filename/language header + copy button ------------------ */
+.prose .code-block {
+  margin: 1.5rem 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.prose .code-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4rem 0.75rem;
+  background: var(--code-bg);
+  border-bottom: 1px solid var(--line);
+  font-size: 0.72rem;
+}
+.prose .code-lang {
+  color: var(--faint);
+  letter-spacing: 0.03em;
+}
+.prose .code-copy {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--faint);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 1px 7px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.prose .code-copy:hover {
+  color: var(--ink);
+  border-color: var(--line);
+}
+.prose .code-copy.is-copied {
+  color: var(--accent);
+}
+/* The Shiki <pre> now nests inside .code-block, so drop its own frame. */
+.prose .code-block pre {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+}
+
+/* ---- Tables --------------------------------------------------------------- */
+.prose .table-wrap {
+  margin: 1.75rem 0;
+  overflow-x: auto;
+}
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.prose th,
+.prose td {
+  text-align: left;
+  padding: 0.5rem 0.8rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.prose thead th {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--faint);
+  border-bottom: 1.5px solid var(--line);
+}
+.prose tbody tr:last-child td {
+  border-bottom: none;
+}
+
 /* ---- Figures (anime / diagrams) ------------------------------------------ */
 .prose figure {
   margin: 2rem 0;
@@ -205,6 +362,33 @@ a {
   border-radius: 8px;
   border: 1px solid var(--line);
   cursor: zoom-in;
+}
+
+/* ---- Full-bleed figures (break out of the 44rem text column) -------------- */
+/* margin-left:50% puts the left edge at the column's centre; translateX(-50%)
+   re-centres the (wider) figure on that point. Because the column is itself
+   centred in the viewport, the figure ends up centred on the viewport too.
+   Width is capped at 94vw so it never triggers a horizontal scrollbar. */
+.prose figure.figure-bleed {
+  width: min(94vw, 68rem);
+  margin-left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  /* Sit above the fixed gutter ToC and paint the page colour behind, so a wide
+     figure scrolling past the ToC occludes it cleanly instead of colliding. */
+  position: relative;
+  z-index: 1;
+  background: var(--paper);
+}
+.prose figure.figure-bleed img {
+  width: 100%;
+}
+@media (max-width: 1179px) {
+  /* On narrower screens there's no gutter to spare — stay a touch wider than
+     the text but don't blow past the viewport. */
+  .prose figure.figure-bleed {
+    width: min(94vw, 52rem);
+  }
 }
 
 /* ---- Lightbox (click image → full-resolution overlay) -------------------- */
@@ -301,6 +485,75 @@ a {
   }
 }
 
+/* ---- Toggle / collapsible aside (site) ----------------------------------- */
+.prose .toggle {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.2rem 1.05rem;
+  margin: 1.5rem 0;
+}
+.prose .toggle > summary {
+  cursor: pointer;
+  padding: 0.7rem 0;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--muted);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.prose .toggle > summary::-webkit-details-marker {
+  display: none;
+}
+/* A rotating triangle marker driven by the open/closed state. */
+.prose .toggle > summary::before {
+  content: "▸";
+  color: var(--accent);
+  transition: transform 0.15s;
+  display: inline-block;
+}
+.prose .toggle[open] > summary::before {
+  transform: rotate(90deg);
+}
+.prose .toggle[open] > summary {
+  color: var(--ink);
+}
+.prose .toggle-content {
+  padding: 0.2rem 0 0.9rem 1.5rem;
+  color: var(--muted);
+}
+
+/* ---- Toggle block (editor) ----------------------------------------------- */
+.toggle-block {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.5rem 0.9rem;
+  margin: 0.4rem 0;
+}
+.toggle-block-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.toggle-block-marker {
+  color: var(--accent);
+  font-size: 0.85rem;
+}
+.toggle-block-summary {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+.toggle-block-body {
+  padding-left: 1.25rem;
+  margin-top: 0.3rem;
+}
+
 /* ---- Callouts ------------------------------------------------------------- */
 .callout {
   display: flex;
@@ -348,7 +601,51 @@ a {
     max-height: 72vh;
     overflow-y: auto;
     line-height: 1.55;
+    z-index: 0;
   }
+}
+.toc-label {
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--faint);
+}
+/* A hairline rail runs down the left edge; the active item paints its slice
+   of the rail in the accent colour, giving a "you are here" marker that
+   slides as you scroll. */
+.toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-left: 1px solid var(--line);
+}
+.toc-item {
+  position: relative;
+  margin: 0;
+}
+.toc-item > a {
+  display: block;
+  padding: 2px 0;
+  color: var(--faint);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.toc-item > a:hover {
+  color: var(--ink);
+}
+.toc-item.is-active > a {
+  color: var(--accent);
+}
+/* The rail marker: a short accent segment aligned to the list's left border. */
+.toc-item.is-active::before {
+  content: "";
+  position: absolute;
+  left: -1px;
+  top: 3px;
+  bottom: 3px;
+  width: 2px;
+  background: var(--accent);
+  border-radius: 2px;
 }
 
 /* ----------------------------------------------------------------------------
@@ -417,6 +714,29 @@ a {
   font-family: var(--font-mono);
   font-size: 0.75rem;
 }
+.studio-cover {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 0.75rem;
+}
+.studio-cover-credit {
+  flex: 1 1 12rem;
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 3px 8px;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+.studio-cover-preview {
+  margin-top: 0.6rem;
+  max-height: 9rem;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+}
 .studio-actions {
   display: flex;
   gap: 0.5rem;
@@ -440,8 +760,18 @@ a {
   margin-top: 1rem;
   min-height: 60vh;
 }
-.studio-hint {
+.studio-footer {
   margin-top: 1.5rem;
+  border-top: 1px solid var(--line);
+  padding-top: 0.9rem;
+}
+.studio-count {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+.studio-hint {
   font-size: 0.72rem;
   color: var(--faint);
 }
@@ -488,43 +818,153 @@ a {
 .math-view:hover {
   background: var(--code-bg);
 }
-.math-panel {
+/* The equation editor: live preview on top, toolbar, code, subtle AI row. */
+.math-editor {
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 0.8rem;
+  padding: 0.7rem;
   background: var(--code-bg);
-  font-family: var(--font-mono);
 }
+/* The big live preview — the "see the change above" surface. */
 .math-live {
-  min-height: 2.2rem;
-  padding: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.6rem;
   background: var(--paper);
   border-radius: 6px;
   border: 1px solid var(--line);
   overflow-x: auto;
 }
+
+/* ---- "You are here" breadcrumb ------------------------------------------- */
+/* Plain-English trail of where the caret sits in the equation, so the code
+   below is legible even to someone who has never written LaTeX. */
+.math-crumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 0.5rem;
+  min-height: 1.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+.math-crumb-pin {
+  color: var(--faint);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.math-crumb-step {
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1px 7px;
+  position: relative;
+}
+/* A soft chevron between steps. */
+.math-crumb-step + .math-crumb-step::before {
+  content: "›";
+  color: var(--faint);
+  position: absolute;
+  left: -8px;
+}
+.math-crumb.warn .math-crumb-warn {
+  color: var(--accent);
+}
+
+/* ---- Word-style toolbar -------------------------------------------------- */
+.math-toolbar {
+  margin-top: 0.6rem;
+}
+.math-tool-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.math-sym-row {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px solid var(--line);
+}
+.math-tool,
+.math-sym {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.4rem;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: border-color 0.12s, background 0.12s;
+}
+.math-sym {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+}
+.math-tool:hover,
+.math-sym:hover {
+  border-color: var(--accent);
+  background: var(--code-bg);
+}
+/* KaTeX icons inside toolbar buttons should not add their own margins. */
+.math-tool .katex {
+  font-size: 0.95em;
+}
+
 .math-input {
   width: 100%;
-  margin-top: 0.5rem;
-  min-height: 3.5rem;
+  margin-top: 0.6rem;
+  min-height: 3rem;
   resize: vertical;
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   background: var(--paper);
   color: var(--ink);
   border: 1px solid var(--line);
   border-radius: 6px;
   padding: 0.5rem;
 }
-.math-tools {
+
+/* ---- Subtle AI helper row (photo / describe) ----------------------------- */
+.math-ai-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
   align-items: center;
+  gap: 0.5rem;
   margin-top: 0.5rem;
 }
+.math-mini {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 3px 8px;
+  cursor: pointer;
+}
+.math-mini:hover {
+  border-color: var(--accent);
+}
+.math-mini:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.math-ai-sep {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--faint);
+}
 .math-desc {
-  flex: 1 1 12rem;
+  flex: 1 1 10rem;
   background: var(--paper);
   color: var(--ink);
   border: 1px solid var(--line);
@@ -540,8 +980,15 @@ a {
 }
 .math-actions {
   display: flex;
+  align-items: center;
   gap: 0.5rem;
-  margin-top: 0.6rem;
+  margin-top: 0.7rem;
+}
+.math-hint {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--faint);
+  margin-left: auto;
 }
 
 /* Callout controls in-editor */
@@ -600,8 +1047,57 @@ a {
   border-radius: 8px;
   border: 1px solid var(--line);
 }
+/* In the editor, a full-bleed figure gets a dashed frame + label so the author
+   can see it will break out on the reader page (we can't truly overflow the
+   editor column here). */
+.anime-fig.is-bleed {
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  padding: 0.5rem;
+  position: relative;
+}
+.anime-fig.is-bleed::before {
+  content: "full-bleed";
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: var(--faint);
+}
+.anime-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+/* Segmented column/full-bleed toggle. */
+.anime-seg {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.anime-seg button {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  background: var(--paper);
+  border: none;
+  padding: 3px 10px;
+  cursor: pointer;
+}
+.anime-seg button + button {
+  border-left: 1px solid var(--line);
+}
+.anime-seg button.is-on {
+  background: var(--accent);
+  color: #fff;
+}
 .anime-clear {
-  margin-top: 0.4rem;
+  margin-top: 0;
   font-family: var(--font-mono);
   font-size: 0.7rem;
   color: var(--faint);

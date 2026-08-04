@@ -2,6 +2,9 @@ import fs from "node:fs";
 import path from "node:path";
 import { slugify, plainText } from "./slug";
 
+export type { ReadingStats } from "./slug";
+export { readingStats } from "./slug";
+
 export type Block = {
   id?: string;
   type: string;
@@ -17,6 +20,8 @@ export type PostMeta = {
   tags: string[];
   summary: string;
   draft?: boolean;
+  cover?: string; // optional hero image URL shown at the top of the post
+  coverCredit?: string; // small caption / credit line under the cover
 };
 
 export type Post = PostMeta & {
@@ -77,6 +82,24 @@ export function getHeadings(blocks: Block[]): Heading[] {
     }
   });
   return hs;
+}
+
+/**
+ * Given a slug, find the posts immediately before and after it in the list
+ * (which is sorted newest-first). "prev" is the newer post, "next" is the
+ * older one — the same reading direction you get scrolling down an archive.
+ */
+export function getAdjacentPosts(slug: string): {
+  prev: PostMeta | null;
+  next: PostMeta | null;
+} {
+  const posts = getAllPosts();
+  const index = posts.findIndex((p) => p.slug === slug);
+  if (index === -1) return { prev: null, next: null };
+  return {
+    prev: index > 0 ? posts[index - 1] : null,
+    next: index < posts.length - 1 ? posts[index + 1] : null,
+  };
 }
 
 export function formatDate(iso: string): string {
