@@ -1,0 +1,196 @@
+{
+  "slug": "beginners-pov-inside-the-realm-of-rl",
+  "title": "Beginner's POV inside the realm of RL   ",
+  "date": "2026-07-04",
+  "tags": [],
+  "summary": "",
+  "draft": false,
+  "blocks": [
+    {
+      "id": "bab04b62-c3ce-40fa-9c26-dd2f92a64ad4",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [],
+      "children": []
+    },
+    {
+      "id": "6994a5a9-6e2b-4d15-ba29-dda26dd4a75b",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "ok we talk about somethings here like agent , state , rewards and env ",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "80d722e4-ce15-4b05-a428-6898a29a6920",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "we'll go with an intuition first approach that would allows us to think critical question which would helps us to connect concepts together ",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "db135746-99a4-460a-8e90-cafe5a360380",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [],
+      "children": []
+    },
+    {
+      "id": "81fc9dca-8241-4a95-83cb-c2c342f1acf1",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "so far I'll write down things which are done \nnon -deterministic and deterministic env ",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "26617081-039b-4c8f-a78d-67597b32957a",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "rewards design how sparse /dense",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "c249c494-f4ae-4f6e-9ff1-af99b261ab51",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "model based and model free ",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "f8b826c9-5f83-4ed8-a5cf-214ec0dac2de",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "what is the equivalent of sample data point in RL ",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "2001af43-0088-4f32-9eb2-44b9ba7f7faf",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "exploration vs exploitation phantom trajectories  ",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "16343aa0-4e97-4695-87c8-01ccc2ec0103",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "designing a reward function wouldn't it be as good as the person making it ?",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "31f67d5d-fe1b-4f51-b436-d3c8a4c4775b",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "fun fact rl gave birth to dynamic programming bellman another Richard who is genius  ",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "62bcc4ca-04d0-4d61-9b12-9a458ab34bc9",
+      "type": "paragraph",
+      "props": {
+        "textColor": "default",
+        "backgroundColor": "default",
+        "textAlignment": "left"
+      },
+      "content": [],
+      "children": []
+    }
+  ]
+}
